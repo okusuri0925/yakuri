@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPI（プロトンポンプ阻害薬）の作用機序</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flow {
+            from { stroke-dashoffset: 100; }
+            to { stroke-dashoffset: 0; }
+        }
+        .blood-flow {
+            stroke-dasharray: 10, 10;
+            animation: flow 5s linear infinite;
+        }
+        
+        #cell-body {
+            fill: #fffbeb;
+            stroke: #fbbf24;
+            stroke-width: 4;
+        }
+        
+        .ppi-inactive { fill: #a855f7; stroke: #6b21a8; stroke-width: 2; } /* 紫 */
+        .ppi-active { fill: #f97316; stroke: #c2410c; stroke-width: 2; }   /* オレンジ */
+        
+        .label-text { font-family: 'sans-serif'; font-weight: 800; font-size: 14px; }
+        .area-label { font-size: 16px; letter-spacing: 0.1em; }
+    </style>
+</head>
+<body class="bg-gray-50 p-4 flex flex-col items-center">
+
+    <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+            <span class="w-2 h-8 bg-blue-600 rounded-full mr-3"></span>
+            PPIの作用機序：壁細胞での動き
+        </h2>
+        
+        <div class="relative w-full h-[400px] rounded-xl overflow-hidden border-2 border-gray-200 mb-6 bg-white">
+            <svg viewBox="0 0 500 400" class="w-full h-full">
+                <!-- 1. 管腔側（胃液）エリア -->
+                <rect x="0" y="0" width="500" height="100" fill="#e0f2fe" />
+                <text x="20" y="35" class="area-label label-text fill-blue-700">【 管腔側（胃の中） 】</text>
+                <text x="20" y="60" class="label-text fill-blue-400" style="font-size: 12px;">※強い酸性環境</text>
+
+                <!-- 2. 血液側（血管）エリア -->
+                <rect x="0" y="320" width="500" height="80" fill="#fee2e2" />
+                <line x1="0" y1="320" x2="500" y2="320" stroke="#fca5a5" stroke-width="2" class="blood-flow" />
+                <text x="20" y="355" class="area-label label-text fill-red-700">【 血液側（血管） 】</text>
+                <text x="20" y="380" class="label-text fill-red-400" style="font-size: 12px;">※薬が運ばれてくるルート</text>
+
+                <!-- 3. 壁細胞本体 -->
+                <path id="cell-body" d="M 40,100 L 460,100 L 460,300 L 40,300 Z" />
+                <text x="210" y="210" class="area-label label-text fill-yellow-700" opacity="0.5">壁細胞</text>
+
+                <!-- プロトンポンプ（胃腔側に面している） -->
+                <g id="pump-group">
+                    <!-- ポンプの土台 -->
+                    <rect x="210" y="85" width="80" height="30" rx="5" fill="#e11d48" />
+                    <!-- ポンプの穴 -->
+                    <path d="M 230,85 Q 250,110 270,85" fill="none" stroke="white" stroke-width="3" />
+                    <text x="215" y="135" class="label-text fill-red-600" style="font-size: 11px;">プロトンポンプ</text>
+                </g>
+
+                <!-- 酸(H+)の放出アニメーション -->
+                <g id="h-ions">
+                    <circle cx="250" cy="80" r="5" fill="#3b82f6">
+                        <animate attributeName="cy" from="80" to="20" dur="1s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite" />
+                    </circle>
+                    <text x="260" y="50" class="label-text fill-blue-600">H+</text>
+                </g>
+
+                <!-- PPI薬物粒子 -->
+                <g id="ppi-capsule" transform="translate(450, 350)">
+                    <circle id="ppi-body" r="10" class="ppi-inactive" />
+                    <text id="ppi-label" x="15" y="5" class="label-text fill-purple-700">PPI</text>
+                </g>
+                
+                <!-- ナレーション字幕エリア -->
+                <rect x="40" y="240" width="420" height="45" rx="10" fill="white" fill-opacity="0.9" stroke="#e5e7eb" />
+                <text id="caption" x="250" y="270" text-anchor="middle" class="label-text fill-gray-800">通常時：壁細胞から胃の中へ酸が放出されています</text>
+            </svg>
+        </div>
+
+        <div class="flex gap-4 justify-center">
+            <button onclick="location.reload()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition font-bold">リセット</button>
+            <button id="start-btn" onclick="startAnimation()" class="px-8 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition font-bold text-lg">
+                機序を再生する
+            </button>
+        </div>
+        
+        <div class="mt-8 grid grid-cols-2 gap-4">
+            <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                <p class="text-purple-800 font-bold text-sm mb-1">● 不活性型（紫）</p>
+                <p class="text-xs text-purple-600">血液中や細胞内ではこの状態。安定しており、まだ攻撃力はありません。</p>
+            </div>
+            <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
+                <p class="text-orange-800 font-bold text-sm mb-1">● 活性型（橙）</p>
+                <p class="text-xs text-orange-600">胃酸（酸性環境）に触れて変身。ポンプにガッチリ結合して破壊します。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ppi = document.getElementById('ppi-capsule');
+        const ppiBody = document.getElementById('ppi-body');
+        const ppiLabel = document.getElementById('ppi-label');
+        const caption = document.getElementById('caption');
+        const hIons = document.getElementById('h-ions');
+        const startBtn = document.getElementById('start-btn');
+
+        async function startAnimation() {
+            startBtn.disabled = true;
+            startBtn.classList.add('opacity-50');
+
+            // 1. 血流に乗って登場
+            caption.textContent = "1. 薬が血液（赤色のエリア）に乗って運ばれてきます";
+            await moveElement(ppi, {x: 450, y: 350}, {x: 250, y: 350}, 1500);
+            await sleep(500);
+
+            // 2. 壁細胞へ浸透
+            caption.textContent = "2. 血液から壁細胞（黄色のエリア）の中へ取り込まれます";
+            await moveElement(ppi, {x: 250, y: 350}, {x: 250, y: 200}, 1500);
+            await sleep(500);
+
+            // 3. 酸性環境へ移動
+            caption.textContent = "3. ポンプ近くの酸が強い場所へ移動します";
+            await moveElement(ppi, {x: 250, y: 200}, {x: 250, y: 120}, 1000);
+
+            // 4. 活性化
+            caption.innerHTML = "4. <tspan fill='#f97316'>酸に触れて活性型に変身！</tspan>";
+            ppiBody.setAttribute('class', 'ppi-active');
+            ppiLabel.textContent = "活性型";
+            ppiLabel.setAttribute('class', 'label-text fill-orange-700');
+            await sleep(1500);
+
+            // 5. 結合
+            caption.textContent = "5. ポンプと不可逆的に結合して機能を止めます";
+            await moveElement(ppi, {x: 250, y: 120}, {x: 250, y: 95}, 800);
+            
+            // 停止
+            hIons.style.display = 'none';
+            document.querySelector('#pump-group rect').setAttribute('fill', '#64748b');
+            
+            caption.innerHTML = "完了：酸の分泌がブロックされました！";
+        }
+
+        function moveElement(el, from, to, duration) {
+            return new Promise(resolve => {
+                const start = performance.now();
+                function animate(time) {
+                    let progress = (time - start) / duration;
+                    if (progress > 1) progress = 1;
+                    const curX = from.x + (to.x - from.x) * progress;
+                    const curY = from.y + (to.y - from.y) * progress;
+                    el.setAttribute('transform', `translate(${curX}, ${curY})`);
+                    if (progress < 1) requestAnimationFrame(animate);
+                    else resolve();
+                }
+                requestAnimationFrame(animate);
+            });
+        }
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    </script>
+</body>
+</html>
