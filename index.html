@@ -59,7 +59,7 @@
 
     <div class="max-w-4xl mx-auto p-6">
         
-        <!-- INDEX PAGE (並び順を変更: ADME -> 循環器 -> 消化器) -->
+        <!-- INDEX PAGE (並び順: 薬物動態 -> 循環器 -> 消化器) -->
         <div id="index" class="page active">
             <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">学習コンテンツ一覧</h2>
@@ -86,6 +86,31 @@
             </div>
         </div>
 
+        <!-- 薬物動態 (ADME) 詳細ページ -->
+        <div id="pkpd-info" class="page">
+            <button onclick="showPage('index')" class="mb-4 text-indigo-600 hover:underline flex items-center">← TOPへ戻る</button>
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">薬物動態：ADMEの全体像</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4 text-gray-700">
+                        <p>薬物が体内に投与され、排泄されるまでの過程は「ADME」と呼ばれます。</p>
+                        <ul class="list-none space-y-2">
+                            <li class="flex items-start bg-blue-50 p-3 rounded-lg"><span class="font-bold text-blue-800 mr-2">A:</span> 吸収 (Absorption) - 血中への移行</li>
+                            <li class="flex items-start bg-blue-50 p-3 rounded-lg"><span class="font-bold text-blue-800 mr-2">D:</span> 分布 (Distribution) - 各組織への移行</li>
+                            <li class="flex items-start bg-blue-50 p-3 rounded-lg"><span class="font-bold text-blue-800 mr-2">M:</span> 代謝 (Metabolism) - 化学構造の変化（主に肝臓）</li>
+                            <li class="flex items-start bg-blue-50 p-3 rounded-lg"><span class="font-bold text-blue-800 mr-2">E:</span> 排泄 (Excretion) - 体外への放出（主に腎臓）</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-100 rounded-xl p-4 flex items-center justify-center border-2 border-dashed border-slate-300">
+                        <div class="text-center text-slate-400">
+                            <span class="text-5xl block mb-2">🧬</span>
+                            <p class="text-sm">人体アニメーション（ADMEフロー）<br>順次公開予定</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- CARDIOVASCULAR INDEX PAGE -->
         <div id="cardio-index" class="page">
             <button onclick="showPage('index')" class="mb-4 text-indigo-600 hover:underline flex items-center">← TOPへ戻る</button>
@@ -94,7 +119,7 @@
                 <p class="text-gray-600 mb-8">血圧を下げる仕組みから、心臓や腎臓との関連までを網羅的に学びます。</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- 1. 降圧薬：Ca拮抗薬 (重要バッジ削除) -->
+                    <!-- 1. 降圧薬：Ca拮抗薬 -->
                     <div class="border-2 border-green-100 rounded-xl p-6 hover:bg-green-50 cursor-pointer transition" onclick="showPage('ca-blocker-info')">
                         <h3 class="font-bold text-green-800 text-lg mb-2">1. 降圧薬：Ca拮抗薬</h3>
                         <p class="text-sm text-gray-600">血管平滑筋のCaチャネルと血管拡張のメカニズム。</p>
@@ -114,7 +139,7 @@
             </div>
         </div>
 
-        <!-- CA BLOCKER PAGE (Animation contents preserved) -->
+        <!-- CA BLOCKER PAGE -->
         <div id="ca-blocker-info" class="page">
             <button onclick="showPage('cardio-index')" class="mb-4 text-indigo-600 hover:underline flex items-center">← 循環器TOPへ戻る</button>
             <div class="bg-white rounded-2xl shadow-xl p-8">
@@ -165,7 +190,7 @@
             </div>
         </div>
 
-        <!-- OTHER PAGES (SINUS, DIURETICS, PKPD, GI) -->
+        <!-- OTHER PAGES -->
         <div id="sinus-rhythm" class="page">
              <button onclick="showPage('cardio-index')" class="mb-4 text-indigo-600 hover:underline flex items-center">← 循環器TOPへ戻る</button>
              <div class="bg-white rounded-2xl shadow-xl p-8">
@@ -185,8 +210,8 @@
                             <circle cx="95" cy="95" r="5" fill="#fde047" class="active-signal" />
                         </svg>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-gray-700">心筋の収縮リズムを理解するための基礎です。正常な波形をイメージしましょう。</p>
+                    <div class="flex-1 text-gray-700">
+                        <p>心筋の収縮リズムを理解するための基礎です。正常な波形をイメージしましょう。</p>
                     </div>
                 </div>
              </div>
@@ -204,14 +229,6 @@
                 </div>
                 <button onclick="startNephronSim()" class="px-6 py-2 bg-blue-600 text-white rounded">シミュレーション開始</button>
              </div>
-        </div>
-        
-        <div id="pkpd-info" class="page">
-            <button onclick="showPage('index')" class="mb-4 text-indigo-600 hover:underline flex items-center">← TOPへ戻る</button>
-            <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
-                <h2 class="text-2xl font-bold mb-4 text-blue-800">薬物動態 (ADME)</h2>
-                <p class="text-gray-600">薬が体内をどう巡るかを学習します（詳細準備中）。</p>
-            </div>
         </div>
 
         <div id="gi-tract" class="page">
